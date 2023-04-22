@@ -53,28 +53,32 @@ router.get("/author/name/:name", async (req, res) => {
 
 
 router.get("/author/id/:id", async (req, res) => {
+   // Hace una solicitud HTTP a una API externa que devuelve un autor específico utilizando el método fetch() de JavaScript
   const autor = await fetch(`http://authors:3000/api/v2/authors/${req.params.id}`);
+  // Convierte la respuesta en formato JSON utilizando el método json() proporcionado por la respuesta de la API externa
   const authorjson = await autor.json();
+  // Extrae el ID del autor del objeto JSON devuelto por la API externa
   const authorId = authorjson.data[0].id;
 
-  const libros = data.dataLibrary.books.filter((libro) => {
-    return libro.authorid == authorId;
+  const books = data.dataLibrary.books.filter((book) => {
+    return book.authorid == authorId;
   });
   
   const response = {
     service: "books",
     architecture: "microservices",
-    length: libros.length,
-    data: libros,
+    length: books.length,
+    data: books,
   };
   return res.send(response);
 });
 
 //buscando years especifico
 router.get('/years/:year', (req, res) => {
-  const year = parseInt(req.params.year);
-  const books = data.dataLibrary.books.filter(book  => book.year === year);
- 
+  // Extrae el valor del parámetro "year" de la solicitud utilizando la destructuración de objetos
+  const {year} = req.params;
+  const books = data.dataLibrary.books.filter(book  => book.year === +year);
+ // Filtra los libros para obtener solo aquellos cuyo año de publicación coincide con el valor de "year"
   const response = {
     service: 'books',
     architecture: 'microservices',
@@ -87,8 +91,8 @@ router.get('/years/:year', (req, res) => {
 
 //Buscando Years mayores
 router.get("/yearsMayor/:year", (req, res) => {
-  const year = parseInt(req.params.year);
-  const books = data.dataLibrary.books.filter(book => book.year >= year);
+  const {year} = req.params;
+  const books = data.dataLibrary.books.filter(book => book.year >= +year);
 
   const response = {
     service: "books",
@@ -104,9 +108,8 @@ router.get("/yearsMayor/:year", (req, res) => {
 //Buscando years menores
 
 router.get("/yearsMenor/:year", (req, res) => {
-  
-  const year = parseInt(req.params.year);
-  const books = data.dataLibrary.books.filter(book => book.year <= year);  
+  const {year} = req.params;
+  const books = data.dataLibrary.books.filter(book => book.year <= +year);  
   const response = {
     service: "books",
     architecture: "microservices",
@@ -130,6 +133,20 @@ router.get('/years/:minYear/:maxYear', (req, res) => {
   };
   return res.json(response); 
 });
+
+router.get('/distributedCountry/:Country', (req, res) => {
+  const {Country} = req.params;
+  const books = data.dataLibrary.books.filter( book  => book.distributedCountries.includes(Country));
+ 
+  const response = {
+    service: 'books',
+    architecture: 'microservices',
+    length: books.length,
+    data: books,
+  };
+  return res.json(response); 
+});
+
 
 module.exports = router; // exporta el enrutador de Express para su uso en otras partes de la aplicación
 

@@ -60,6 +60,24 @@ router.get("/author/:name", (req, res) => {
   return res.send(response);
 });
 
+router.get("/author/country/:Country", (req, res) => {
+  
+  const author = data.dataLibrary.authors.filter((author) => {
+    return author.country.includes(req.params.Country);
+  });
+
+  
+  const response = {
+    service: "authors",
+    architecture: "microservices",
+    length: author.length,
+    data: author
+  };
+
+  // Enviamos la respuesta
+  return res.send(response);
+});
+
 // Exportamos el objeto Router
 module.exports = router;
 

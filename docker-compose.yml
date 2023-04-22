@@ -13,8 +13,8 @@ services:
   countries:
     build: ./microservices/countries-service
 
-  #lenguajes:
-    #build: ./microservices/lenguajes-service
+  lenguajes:
+    build: ./microservices/lenguajes-service
 
   nginx:
     image: nginx:latest
@@ -27,4 +27,4 @@ services:
       - authors
       - books
       - countries
-      #- lenguajes
+      - lenguajes
